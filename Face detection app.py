@@ -32,10 +32,13 @@ if uploaded_file is not None:
     # Ajouter des contrôles pour ajuster les paramètres
     scaleFactor = st.slider("scaleFactor", 1.1, 2.0, 1.2, 0.1)
     minNeighbors = st.slider("minNeighbors", 1, 10, 5)
-    color = st.color_picker("Couleur du rectangle", "#FF0000")
+    # Convertir la couleur sélectionnée par l'utilisateur au format BGR
+    color_hex = st.color_picker("Couleur du rectangle", "#FF0000")
+    color_bgr = (int(color_hex[1:3], 16), int(color_hex[3:5], 16), int(color_hex[5:7], 16))
+
 
     # Détecter les visages et afficher l'image résultante
-    result_image, num_faces = detect_faces(image, scaleFactor, minNeighbors, color)
+    result_image, num_faces = detect_faces(image, scaleFactor, minNeighbors, color_bgr)
     st.image(result_image, channels="BGR")
 
     # Bouton pour sauvegarder l'image avec les visages détectés
