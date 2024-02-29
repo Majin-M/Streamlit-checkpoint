@@ -43,8 +43,8 @@ st.write("Exactitude du modèle :", accuracy)
 st.title('Prediction ouverture de compte bancaire')
 
 # Champs de saisie pour les caractéristiques
-country = st.selectbox('Pays', data_encoded['country'].unique())
-year = st.slider('Année', int(data_encoded['year'].min()), int(data_encoded['year'].max()), int(data_encoded['year'].median()))
+country = st.selectbox('Pays', data['country'].unique())
+year = st.slider('Année', int(data['year'].min()), int(data['year'].max()), int(data['year'].median()))
 
 
 # Bouton de validation
