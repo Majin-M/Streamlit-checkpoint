@@ -15,9 +15,22 @@ from pandas_profiling import ProfileReport
 profile = ProfileReport(data)
 profile.to_file("expresso_churn_data_report.html")
 
+# Remplacer les valeurs manquantes dans les colonnes numériques par la moyenne
+data[['MONTANT', 'FREQUENCE_RECH', 'REVENUE', 'ARPU_SEGMENT', 'FREQUENCE', 'DATA_VOLUME', 'ON_NET', 'ORANGE', 'TIGO', 'ZONE1', 'ZONE2', 'FREQ_TOP_PACK']] = \
+data[['MONTANT', 'FREQUENCE_RECH', 'REVENUE', 'ARPU_SEGMENT', 'FREQUENCE', 'DATA_VOLUME', 'ON_NET', 'ORANGE', 'TIGO', 'ZONE1', 'ZONE2', 'FREQ_TOP_PACK']].fillna(data.mean())
+
+# Remplacer les valeurs manquantes dans la colonne REGION par la valeur la plus fréquente
+data['REGION'].fillna(data['REGION'].mode()[0], inplace=True)
+
+# Remplacer les valeurs manquantes dans les colonnes numériques par la moyenne
+data.fillna(data.mean(), inplace=True)
+
+# Encodage des caractéristiques catégorielles
+data_encoded = pd.get_dummies(data)
+
 # Diviser les données en fonctionnalités et étiquettes
-X = data.drop("CHURN", axis=1)  # Remplacer "target_column" par le nom de votre colonne cible
-y = data["CHURN"]
+X = data_encoded.drop("CHURN", axis=1)  
+y = data_encoded["CHURN"]
 
 # Diviser les données en ensembles d'entraînement et de test
 from sklearn.model_selection import train_test_split
@@ -59,7 +72,7 @@ def main():
     # Bouton de prédiction
     if st.button("Faire la prédiction"):
         # Rassembler les données d'entrée dans un DataFrame
-        input_data = pd.DataFrame([[feature1, feature2]], columns=["MONTANT", "FREQUENCE_RECH"])  # Ajouter d'autres colonnes si nécessaire
+        input_data = pd.DataFrame([[feature1, feature2]], columns=["MONTANT", "FREQUENCE_RECH"])  
 
         # Faire la prédiction
         prediction = predict(input_data)
