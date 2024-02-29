@@ -3,7 +3,7 @@ import numpy as np
 import streamlit as st
 import joblib
 
-data = pd.read_csv("C:\\Users\\marcs\\OneDrive\\Bureau\\Expresso_churn_dataset.csv")
+data = pd.read_csv("Expresso_churn_dataset.csv")
 
 print(data.head())
 
@@ -16,8 +16,8 @@ profile = ProfileReport(data)
 profile.to_file("expresso_churn_data_report.html")
 
 # Diviser les données en fonctionnalités et étiquettes
-X = data.drop("target_column", axis=1)  # Remplacer "target_column" par le nom de votre colonne cible
-y = data["target_column"]
+X = data.drop("CHURN", axis=1)  # Remplacer "target_column" par le nom de votre colonne cible
+y = data["CHURN"]
 
 # Diviser les données en ensembles d'entraînement et de test
 from sklearn.model_selection import train_test_split
@@ -37,10 +37,11 @@ print("Accuracy:", accuracy_score(y_test, y_pred))
 print("Classification Report:")
 print(classification_report(y_test, y_pred))
 
+# Sauvegarder le modèle entraîné dans un fichier
+joblib.dump(classifier, "modele_ml.pkl")
 
 # Charger le modèle entraîné
-model = joblib.load("modele_ml.pkl")  # Remplacer "modele_ml.pkl" par le nom de votre fichier de modèle
-
+model = joblib.load("modele_ml.pkl") 
 # Fonction pour faire des prédictions
 def predict(data):
     prediction = model.predict(data)
@@ -51,14 +52,14 @@ def main():
     st.title("Application de prédiction")
 
     # Ajouter des champs de saisie pour les fonctionnalités
-    feature1 = st.number_input("Feature 1")
-    feature2 = st.number_input("Feature 2")
+    feature1 = st.number_input("MONTANT")
+    feature2 = st.number_input("FREQUENCE_RECH")
     # Ajouter d'autres champs de saisie pour les autres fonctionnalités
 
     # Bouton de prédiction
     if st.button("Faire la prédiction"):
         # Rassembler les données d'entrée dans un DataFrame
-        input_data = pd.DataFrame([[feature1, feature2]], columns=["feature1", "feature2"])  # Ajouter d'autres colonnes si nécessaire
+        input_data = pd.DataFrame([[feature1, feature2]], columns=["MONTANT", "FREQUENCE_RECH"])  # Ajouter d'autres colonnes si nécessaire
 
         # Faire la prédiction
         prediction = predict(input_data)
