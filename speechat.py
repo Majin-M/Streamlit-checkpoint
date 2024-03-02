@@ -1,7 +1,6 @@
 import streamlit as st
 import nltk
 import speech_recognition as sr
-import re
 
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
